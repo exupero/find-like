@@ -22,3 +22,20 @@ With `find-spec-file` somewhere on your path and with the current directory as t
 $ find-spec-file app/models/user.rb
 spec/models/user_spec.rb
 ```
+
+Vim
+---
+
+When using Vim, calling the following function will open the spec file that corresponds to the current buffer.
+
+```vimscript
+function OpenSpecFile()
+  exe "edit ".system("find-spec-file".expand("%"))
+endfunction
+```
+
+This is the mapping I use to open the spec file within a split:
+
+```vimscript
+nnoremap <LocalLeader>u :vsp<CR>:call OpenSpecFile()<CR>
+```
