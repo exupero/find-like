@@ -30,7 +30,7 @@ When using Vim, calling the following function will open the spec file that corr
 
 ```vim
 function OpenSpecFile()
-  exe "edit ".system("find-spec-file".expand("%"))
+  exe "edit ".system("find-spec-file ".expand("%"))
 endfunction
 ```
 
