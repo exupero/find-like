@@ -8,7 +8,6 @@ import (
 	"github.com/exupero/levenshtein"
 )
 
-var filename = ""
 var scores = map[string]int{}
 
 func best(scores map[string]int) string {
@@ -21,19 +20,27 @@ func best(scores map[string]int) string {
 	return bestPath
 }
 
-func scoreFilename(path string, f os.FileInfo, err error) error {
-	if !f.Mode().IsDir() {
-		scores[path] = levenshtein.LevenshteinDistance(filename, path[5:]) // trim 'spec/'
+func scoreFilename(filename string) func(string, os.FileInfo, error) error {
+	return func(path string, f os.FileInfo, err error) error {
+		if !f.Mode().IsDir() {
+			scores[path] = levenshtein.LevenshteinDistance(filename, path[5:]) // trim 'spec/'
+		}
+		return nil
 	}
-	return nil
 }
 
 func main() {
 	flag.Parse()
-	filename = flag.Arg(0)
-	err := filepath.Walk("spec", scoreFilename)
+
+	if flag.NArg() != 2 {
+		fmt.Fprintf(os.Stderr, "Wrong number of arguments: expected file, directory")
+	}
+
+	filename := flag.Arg(0)
+	err := filepath.Walk(flag.Arg(1), scoreFilename(filename))
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(best(scores))
 }
