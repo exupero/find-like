@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
 	"github.com/exupero/levenshtein"
 )
 
@@ -23,7 +24,7 @@ func best(scores map[string]int) string {
 func scoreFilename(filename string) func(string, os.FileInfo, error) error {
 	return func(path string, f os.FileInfo, err error) error {
 		if !f.Mode().IsDir() {
-			scores[path] = levenshtein.LevenshteinDistance(filename, path[5:]) // trim 'spec/'
+			scores[path] = levenshtein.LevenshteinDistance(filename, path)
 		}
 		return nil
 	}
@@ -32,14 +33,17 @@ func scoreFilename(filename string) func(string, os.FileInfo, error) error {
 func main() {
 	flag.Parse()
 
-	if flag.NArg() != 2 {
-		fmt.Fprintf(os.Stderr, "Wrong number of arguments: expected file, directory")
+	if flag.NArg() < 2 {
+		fmt.Fprintf(os.Stderr, "Too few arguments; expected at least one directory to search\n")
+		return
 	}
 
 	filename := flag.Arg(0)
-	err := filepath.Walk(flag.Arg(1), scoreFilename(filename))
-	if err != nil {
-		fmt.Println(err)
+	for _, dir := range flag.Args()[1:] {
+		err := filepath.Walk(dir, scoreFilename(filename))
+		if err != nil {
+			fmt.Fprintf(os.Stderr, fmt.Sprintf("%s", err))
+		}
 	}
 
 	fmt.Println(best(scores))
