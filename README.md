@@ -1,22 +1,19 @@
-find-like
-==============
+# Like
 
-Find a filename in the given directory that most closely resembles the given filename.
+Utilities for finding similar things.
 
-Building
---------
+## like
 
-With Go installed,
+Returns the line of input that most closely matches the given text.
 
 ```bash
-$ go get
-$ go build find-like.go
+cat names | like wombat
 ```
 
-Usage
------
+## find-like
+
+Returns the filename in a set of directories that most closely matches the given text.
 
 ```bash
-$ find-like app/models/user.rb spec
-spec/models/user_spec.rb
+find-like app/models/user.rb tests spec
 ```
