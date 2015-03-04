@@ -17,3 +17,13 @@ Returns the filename in a set of directories that most closely matches the given
 ```bash
 find-like app/models/user.rb tests spec
 ```
+
+## lsort
+
+Sorts lines from stdin by Levenshtein distance.
+
+Accepts the `-w` flag to calculate Levenshtein distance using words instead of letters.
+
+```bash
+cat names | lsort
+```
