@@ -22,8 +22,25 @@ find-like app/models/user.rb tests spec
 
 Sorts lines from stdin by Levenshtein distance.
 
-Accepts the `-w` flag to calculate Levenshtein distance using words instead of letters.
-
 ```bash
 cat names | lsort
 ```
+
+Options:
+
+- `-w` calculate Levenshtein distance using words instead of letters.
+
+## lgraph
+
+Creates a graph of lines from stdin by Levenshtein distance.
+
+Default output is 3 integers: a line number, the line number of the line that most closely matches the line at the first line number, and the Levenshtein distance between the two lines.
+
+```bash
+cat names | lgraph
+```
+
+Options:
+
+- `-w` calculate Levenshtein distance using words instead of letters
+- `-l` print whole lines instead of line numbers (takes four lines per edge rather than one)
